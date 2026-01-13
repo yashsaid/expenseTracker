@@ -13,28 +13,36 @@ function ExpenseChart({ data }) {
     );
   }
 
-  // Color palette for the pie chart
-  const colors = [
-    "#FF6384", // Red
-    "#36A2EB", // Blue
-    "#FFCE56", // Yellow
-    "#4BC0C0", // Teal
-    "#9966FF", // Purple
-    "#FF9F40", // Orange
-    "#FF6384", // Pink
-    "#C9CBCF", // Gray
-    "#4BC0C0", // Cyan
-    "#FF6384", // Red
-  ];
+  // Generate colors dynamically based on data length
+  const getColors = (length) => {
+    const vibrantColors = [
+      "#FF6384", // Red/Pink
+      "#36A2EB", // Blue
+      "#FFCE56", // Yellow
+      "#4BC0C0", // Teal/Cyan
+      "#9966FF", // Purple
+      "#FF9F40", // Orange
+      "#FF6384", // Red
+      "#C9CBCF", // Gray
+      "#FF6384", // Pink
+      "#4BC0C0", // Cyan
+    ];
+    return Array.from({ length }, (_, i) => vibrantColors[i % vibrantColors.length]);
+  };
 
+  const chartColors = getColors(data.length);
+  
   const chartData = {
     labels: data.map((d) => d.category),
     datasets: [
       {
+        label: "Expenses",
         data: data.map((d) => d.total),
-        backgroundColor: colors.slice(0, data.length),
-        borderColor: "#fff",
-        borderWidth: 2,
+        backgroundColor: chartColors,
+        borderColor: "#ffffff",
+        borderWidth: 3,
+        hoverBorderWidth: 4,
+        hoverBorderColor: "#000000",
       },
     ],
   };
@@ -48,11 +56,23 @@ function ExpenseChart({ data }) {
         labels: {
           padding: 15,
           font: {
-            size: 12,
+            size: 14,
+            weight: "bold",
           },
+          usePointStyle: true,
+          pointStyle: "circle",
         },
       },
       tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        padding: 12,
+        titleFont: {
+          size: 14,
+          weight: "bold",
+        },
+        bodyFont: {
+          size: 13,
+        },
         callbacks: {
           label: function(context) {
             const label = context.label || "";
@@ -67,9 +87,11 @@ function ExpenseChart({ data }) {
   };
 
   return (
-    <div style={{ maxWidth: "500px", marginTop: "30px" }}>
-      <h5>Category-wise Distribution</h5>
-      <Pie data={chartData} options={options} />
+    <div style={{ maxWidth: "600px", marginTop: "30px", marginBottom: "30px" }}>
+      <h5 className="mb-3">Category-wise Distribution</h5>
+      <div style={{ height: "400px" }}>
+        <Pie data={chartData} options={options} />
+      </div>
     </div>
   );
 }
