@@ -6,7 +6,6 @@ const authRoutes = require("./routes/authRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
